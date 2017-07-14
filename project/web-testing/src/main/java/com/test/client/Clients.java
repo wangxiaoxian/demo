@@ -1,11 +1,10 @@
 package com.test.client;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.KeyManagementException;
+import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -13,6 +12,7 @@ import java.util.Hashtable;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import org.apache.axis.components.net.JSSESocketFactory;
@@ -166,7 +166,7 @@ public class Clients {
         try {
             client = new DefaultHttpClient();
             if (postUrl.startsWith("https")) {
-                client = httpsClient4_1(client);
+                client = getEmptyHttpsClient4_1(client);
             }
             // 最大连接时间
             int reqTime = 30000;
@@ -225,10 +225,10 @@ public class Clients {
      * @return 
      * HttpClient 
      */
-    private HttpClient httpsClient4_1(HttpClient client) {
+    private HttpClient getEmptyHttpsClient4_1(HttpClient client) {
         ThreadSafeClientConnManager mgr = null;
         try {
-            SSLContext ctx = getSslContext();
+            SSLContext ctx = getEmptySslContext();
             SSLSocketFactory ssf = new SSLSocketFactory(ctx, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
             SchemeRegistry registry = new SchemeRegistry();
             registry.register(new Scheme("https", 443, ssf));
@@ -240,10 +240,10 @@ public class Clients {
         return new DefaultHttpClient(mgr, client.getParams());
     }
 
-    private HttpClient httpsClient4_3() {
+    private HttpClient getEmptyHttpsClient4_3() {
         CloseableHttpClient httpClient = null;
         try {
-            SSLContext ctx = getSslContext();
+            SSLContext ctx = getEmptySslContext();
             SSLConnectionSocketFactory ssf = new SSLConnectionSocketFactory(ctx);
             httpClient = HttpClients.custom().setSSLSocketFactory(ssf).build();
         } catch (Exception e) {
@@ -252,7 +252,41 @@ public class Clients {
         return httpClient;
     }
 
-    private SSLContext getSslContext() throws NoSuchAlgorithmException, KeyManagementException {
+    private HttpClient getHttpsClient4_3(String keyStorePath, String keyStorePwd) {
+        HttpClient httpClient = null;
+        FileInputStream fis = null;
+        SSLConnectionSocketFactory socketFactory = null;
+        try {
+            // 加载KeyStore
+            fis = new FileInputStream(new File(keyStorePath));
+            KeyStore trustStore = KeyStore.getInstance(
+                    KeyStore.getDefaultType());
+            trustStore.load(fis, keyStorePwd.toCharArray());
+
+            TrustManagerFactory tmf = TrustManagerFactory
+                    .getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            tmf.init(trustStore);
+
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, tmf.getTrustManagers(), null);
+            socketFactory = new SSLConnectionSocketFactory(sslContext);
+            httpClient = HttpClients.custom().setSSLSocketFactory(socketFactory)
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return httpClient;
+    }
+
+    private SSLContext getEmptySslContext() throws NoSuchAlgorithmException, KeyManagementException {
         SSLContext ctx = SSLContext.getInstance("TLS");
         TrustManager tm = new X509TrustManager() {
             public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {}
@@ -274,7 +308,7 @@ public class Clients {
 
         protected void initFactory() {
             try {
-                SSLContext ctx = getSslContext();
+                SSLContext ctx = getEmptySslContext();
                 super.sslFactory = ctx.getSocketFactory();
             } catch (Exception e) {
                 e.printStackTrace();
