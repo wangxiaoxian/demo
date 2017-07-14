@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/CSS">
+.tip {position:relative;left:75px; font-weight:bold;}
+.tip:link,.tip:hover {text-decoration:none;color:#000;display:block}
+.tip span {display:none;text-decoration:none;}
+.tip:visited {color:#000;text-decoration:underline;}
+.tip:hover .tip_info {display:block;border:1px solid #F96;background:#FFEFEF;
+padding:10px 20px;position:absolute;top:0px;left:90px;color:#009933}
+</style>
+<title>使用纯CSS实现</title>
+</head>
+<body>
+<a class="tip" href="#">
+移到这里试试!<span class="tip_info">这里是提示信息!</span>
+</a>
+<p>（虽然仅用了css实现，但是只是将调用事件从js转换成了css，并没有本质上的变化。但是比较简练，可以考虑采用。）</p>
+</body>
+</html>

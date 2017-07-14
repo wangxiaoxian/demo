@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+   
+<service name="HelloWorld">  
+        <description>web service</description>  
+        <!-- ServiceObjectSupplier是固定的名称,由它获取Spring的容器ApplicationContext引用 -->
+        <parameter name="ServiceObjectSupplier">  
+            org.apache.axis2.extensions.spring.receivers.SpringServletContextObjectSupplier  
+        </parameter>
+        <!-- SpringBeanName是固定的,表示该bean HelloWorldService 是Spring中的bean的id-->
+        <parameter name="SpringBeanName">HelloWorldService</parameter>  
+        <!-- 一定要配置messageReceiver,下面的配置不可少,为了方便都用输入输出类型 ,不配置默认会使用OMElement参数,rpc方式调用或者浏览器直接访问均会报错-->      
+ 		<operation name="sayHelloWorld">
+    		<messageReceiver  mep="http://www.w3.org/2004/08/wsdl/in-out" class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+    	</operation>
+    	<operation name="meeting">
+    		<messageReceiver  mep="http://www.w3.org/2004/08/wsdl/int-out" class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+    	</operation>
+  		<operation name="queryFamily">
+    		<messageReceiver  mep="http://www.w3.org/2004/08/wsdl/in-out" class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+    	</operation>
+    	<operation name="queryByUser">
+    		<messageReceiver  mep="http://www.w3.org/2004/08/wsdl/int-out" class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+    	</operation>
+</service>
