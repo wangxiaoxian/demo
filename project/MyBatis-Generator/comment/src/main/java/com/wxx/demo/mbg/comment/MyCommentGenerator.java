@@ -123,6 +123,7 @@ public class MyCommentGenerator implements CommentGenerator {
         sb.append(" * 表名：").append(introspectedTable.getFullyQualifiedTable()).append("\n");
         sb.append(" * @author ").append(systemPro.getProperty("user.name")).append(" ").append(currentDateStr);
         sb.append(" * @version ").append(VERSION);
+        sb.append(" * @since ").append(VERSION);
 
         topLevelClass.addJavaDocLine(sb.toString());
         topLevelClass.addJavaDocLine(" */");
