@@ -49,7 +49,7 @@
             <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
 	        <property name="enableSubPackages" value="false" />
 
-            <!-- 是否对类CHAR类型的列的数据进行trim操作 -->
+            <!-- 是否对CHAR类型的列的数据进行trim操作 -->
 	        <property name="trimStrings" value="true" />
 	    </javaModelGenerator>
 

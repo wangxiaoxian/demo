@@ -22,6 +22,7 @@ import org.mybatis.generator.config.PropertyRegistry;
 public class MyCommentGenerator implements CommentGenerator {
 
     private static final String COMPANY_RIGHT_INFO = "Copyright (c) 2017 Aspire Tech,Inc. All rights reserved.";
+    private static final String VERSION = "2.0.0.001";
 
     private Properties properties;
     private Properties systemPro;
@@ -121,6 +122,7 @@ public class MyCommentGenerator implements CommentGenerator {
         sb.append(" * ").append(introspectedTable.getRemarks()).append("\n");
         sb.append(" * 表名：").append(introspectedTable.getFullyQualifiedTable()).append("\n");
         sb.append(" * @author ").append(systemPro.getProperty("user.name")).append(" ").append(currentDateStr);
+        sb.append(" * @version ").append(VERSION);
 
         topLevelClass.addJavaDocLine(sb.toString());
         topLevelClass.addJavaDocLine(" */");
