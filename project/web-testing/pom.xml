@@ -21,35 +21,16 @@
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
 	</properties>
 
-	<distributionManagement>
-		<repository>
-			<id>user-release</id>
-			<name>Aspire Release Repository</name>
-			<url>http://10.12.3.121:8081/nexus/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>user-snapshot</id>
-			<name>Aspire Snapshots</name>
-			<url>http://10.12.3.121:8081/nexus/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
 
 	<repositories>
-		<repository>
-			<id>aspire-thirdparty-nexus</id>
-			<name>aspire thirdparty nexus</name>
-			<url>http://10.12.3.121:8081/nexus/content/repositories/thirdparty</url>
-		</repository>
-		<repository>
-			<id>central-nexus</id>
-			<name>aspire central nexus</name>
-			<url>http://10.12.3.121:8081/nexus/content/repositories/central/</url>
-		</repository>
-		<repository>
-			<id>aspire-releases</id>
-			<name>Aspirecn Releases</name>
-			<url>http://10.12.3.121:8081/nexus/content/repositories/aspire-releases/</url>
-		</repository>
+        <repository>
+            <id>aliyun</id>
+            <name>aliyun Repository</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
 	</repositories>
 
 	<build>
